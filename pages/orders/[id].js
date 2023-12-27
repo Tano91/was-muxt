@@ -27,7 +27,6 @@ import { Fragment } from 'react';
 import { useSession } from "next-auth/react"
 import { arrayRemove  } from 'firebase/firestore';
 import ConfirmDialog from '../../comps/confirmDialogue';
-
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -65,6 +64,8 @@ export async function getServerSideProps(context) {
 const Details = ({ order, statuses, users}) => {
     const [orderState, setOrderState] = useState(order);
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
 
 
     const { data: session, status } = useSession()
@@ -169,17 +170,19 @@ const Details = ({ order, statuses, users}) => {
     useEffect(()=>{
     }, [listStatuses, listUsers]);
 
-
-
     //comments logic
 
     const [newComment, setNewComment]= useState('')
     const [allComments, setAllComments] = useState(orderState.comments || []);
 
+    
+    
+
 
 
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true)
       
         const commentData = {
           user: session.user ? session.user.name: '',
@@ -207,7 +210,9 @@ const Details = ({ order, statuses, users}) => {
           toast.error('An error occurred while adding the comment.', {
             hideProgressBar: true,
           });
-        }
+        } finally {
+        setIsSubmitting(false);
+      }
         
         setNewComment(''); // Clear the text field
       };
@@ -284,7 +289,7 @@ const Details = ({ order, statuses, users}) => {
                 </Box>
 
                     {/* Info Display */}
-                <Grid container sx={{ flexDirection:{xs:'column', md:'row'}, p:4, justifyContent: 'space-between'}}>
+                <Grid container sx={{ flexDirection:{xs:'column', md:'row'}, p:4, alignItems:'center', justifyContent: 'space-between'}}>
 
                     {/* Rush & Issues */}
                 <Divider  style={{width:'100%', height:'100%'}}>
@@ -534,18 +539,30 @@ const Details = ({ order, statuses, users}) => {
 
                     <Divider style={{width:'100%', height:'100%'}}><Chip label="COMMENTS" /></Divider>
 
-                    <FormControl  variant="standard" onSubmit={handleCommentSubmit} component="form" sx={{width:'100%', mt:4}} noValidate autoComplete="off">
-                        <Box>
-                            <CommentIcon color='primary'/>
-                        <TextField 
-                            fullWidth
-                            label={'Type a Comment & Press Enter!'} 
-                            id="commentBox"
-                            value={newComment} // Bind the input value to the state variable
-                            onChange={(e) => setNewComment(e.target.value)}
-                        />
-                        </Box> 
+                    <FormControl variant="standard" onSubmit={handleCommentSubmit} component="form" sx={{width:'100%', mt:4}} noValidate autoComplete="off">
+                    <Box>
+                        <CommentIcon color='primary'/>
+                    <TextField 
+                        fullWidth
+                        label={'Type a Comment'} 
+                        id="commentBox"
+                        value={newComment} // Bind the input value to the state variable
+                        onChange={(e) => setNewComment(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                            }
+                        }}
+                        InputProps={{
+                            endAdornment:<Button
+                     
+                            type="submit" disabled={isSubmitting}>Submit</Button>
+                        }}
+                        
+                    />
+                    </Box> 
                     </FormControl>
+
 
                     <List sx={{ width: '100%'}} >
                         {orderState?.comments?.map((item) => (
