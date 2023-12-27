@@ -77,8 +77,8 @@ export async function getStaticProps() {
     props: { orders: dataOrders, statuses: dataStatuses, users: dataUsers },
     // Next.js will attempt to re-generate the page:
     // - When a request comes in
-    // - At most once every 10 seconds
-    revalidate: 10,
+    // - At most once every 2 seconds
+    revalidate: 2,
   };
 }
 
