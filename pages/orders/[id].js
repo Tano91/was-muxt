@@ -290,13 +290,13 @@ const Details = ({ order, statuses, users}) => {
                             <Typography variant='h6'>{orderState.location.region}</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography>Room #:</Typography>
+                            <Typography sx={{pt:{xs:2,md:0}}}>Room #:</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                             <Typography variant='h6'>{orderState.location.room}</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography>Videographer:</Typography>
+                            <Typography sx={{pt:{xs:2,md:0}}}>Videographer:</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                             <Typography variant='h6'>{orderState.location.videographer}</Typography>
@@ -312,13 +312,13 @@ const Details = ({ order, statuses, users}) => {
                             <Typography variant='h6'>{orderState.location.weddingDate}</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-start'}}}>
-                            <Typography>Release:</Typography>
+                            <Typography sx={{pt:{xs:2,md:0}}}>Release:</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                             <Typography variant='h6'>{orderState.location.release}</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-start'}}}>
-                            <Typography>Due:</Typography>
+                            <Typography sx={{pt:{xs:2,md:0}}}>Due:</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                             <Typography variant='h6'>{orderState.package.due}</Typography>
