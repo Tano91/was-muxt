@@ -52,14 +52,8 @@ export async function getServerSideProps(context) {
 
 
 const Details = ({ order, statuses, users}) => {
-    // const [orderState, setOrderState] = useState(order);
     const [confirmOpen, setConfirmOpen] = useState(false);
-    // const [isSubmitting, setIsSubmitting] = useState(false);
     const [orderState, setOrderState] = useState(order);
-
-
-
-    // const { data: session, status } = useSession()
 
     const router = useRouter()
 
@@ -161,72 +155,6 @@ const Details = ({ order, statuses, users}) => {
     useEffect(()=>{
     }, [listStatuses, listUsers]);
 
-
-    // //comments logic
-    // const [newComment, setNewComment]= useState('')
-    // const [allComments, setAllComments] = useState(orderState.comments || []);
-
-    // const handleCommentSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setIsSubmitting(true)
-      
-    //     const commentData = {
-    //       user: session.user ? session.user.name: '',
-    //       image: session.user? session.user.image: '',
-    //       comment: newComment,
-    //       id: uid(),
-    //     };
-      
-    //     const docRef = doc(db, 'orders', orderState.id);
-      
-    //     try {
-    //       await updateDoc(docRef, {
-    //         comments: arrayUnion(commentData),
-    //       });
-
-    //     // Update the order state to include the new comment
-    //     setOrderState((prevState) => ({
-    //         ...prevState,
-    //         comments: [...prevState.comments, commentData],
-    //     }));
-          
-          
-    //     } catch (error) {
-    //       console.error('Error adding comment:', error);
-    //       toast.error('An error occurred while adding the comment.', {
-    //         hideProgressBar: true,
-    //       });
-    //     } finally {
-    //     setIsSubmitting(false);
-    //   }
-        
-    //     setNewComment(''); // Clear the text field
-    //   };
-
-
-      //Delete Comment Logic
-    // const handleDeleteComment =  async (item) => {
-    //     const docRef = doc(db, "orders", orderState.id);
-
-    //     try {
-    //         await updateDoc(docRef, {
-    //           comments: arrayRemove(item)
-    //         });
-
-    //         // Update the state by removing the deleted comment
-    //         setOrderState((prevState) => ({
-    //             ...prevState,
-    //             comments: prevState.comments.filter((comment) => comment.id !== item.id)
-    //         }));
-            
-    //         console.log('Item deleted successfully');
-    //       } catch (error) {
-    //         console.error('Error deleting item:', error);
-    //       }
-
-    // }
-      
-
     
     return ( 
         <>
@@ -259,8 +187,8 @@ const Details = ({ order, statuses, users}) => {
                 
                 
             </Container>
-            
-                <Box sx={{ pt:2, pr:4, display:'flex', justifyContent:{xs:'center', md:'flex-end'}}}>
+                     {/* Edit & Delete */}
+                <Box sx={{ pt:2, pr:{xs:0, md:4}, display:'flex', justifyContent:{xs:'center', md:'flex-end'}}}>
                 <Link href={"/orders/edit/" + orderState.id}><Button variant='outlined' disableElevation color='warning' sx={{ mr:2}}><EditIcon/></Button></Link>
 
                     <Button variant='outlined' disableElevation color='error' 
@@ -353,7 +281,7 @@ const Details = ({ order, statuses, users}) => {
                     {/* Location Details */}
                 <Divider  style={{width:'100%', height:'100%'}}><Chip label="LOCATION DETAILS" /></Divider>
 
-                  <Grid item xs={5} py={4} >
+                  <Grid item xs={1} md={5} py={4} pr={10}>
                     <Grid container sx={{display:'flex', flexDirection:{xs:'column', md:'row'}}}>
                         <Grid item xs={6}>
                             <Typography>Region:</Typography>
@@ -375,7 +303,7 @@ const Details = ({ order, statuses, users}) => {
                         </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item xs={5} py={4}>
+                  <Grid item xs={1} md={5} py={4} pr={10}>
                     <Grid container sx={{display:'flex', flexDirection:{xs:'column', md:'row'}}}>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-start'}}}>
                             <Typography>Wedding Date:</Typography>
@@ -402,7 +330,7 @@ const Details = ({ order, statuses, users}) => {
 
                   <Divider style={{width:'100%', height:'100%'}}><Chip label="GUEST DETAILS" /></Divider>
 
-                  <Grid item xs={5} py={4} >
+                  <Grid item xs={1} md={5} py={4} pr={10} >
                     <Grid container sx={{display:'flex', flexDirection:{xs:'column', md:'row'}}}>
                         <Grid item xs={6}>
                             <Typography>Booking Number:</Typography>
@@ -411,20 +339,20 @@ const Details = ({ order, statuses, users}) => {
                             <Typography variant='h6'>{orderState.guest.bookingNumber}</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography>Groom First Name:</Typography>
+                            <Typography sx={{pt:{xs:2,md:0}}}>Groom First Name:</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                             <Typography variant='h6'>{orderState.guest.groomFirstName}</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography>Bride First Name:</Typography>
+                            <Typography sx={{pt:{xs:2,md:0}}}>Bride First Name:</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                             <Typography variant='h6'>{orderState.guest.brideFirstName}</Typography>
                         </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item xs={5} py={4}>
+                  <Grid item xs={1} md={5} py={4} pr={10}>
                     <Grid container sx={{display:'flex', flexDirection:{xs:'column', md:'row'}}}>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-start'}}}>
                             <Typography>Receipt Number:</Typography>
@@ -433,15 +361,15 @@ const Details = ({ order, statuses, users}) => {
                             <Typography variant='h6'>{orderState.guest.receiptNumber}</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-start'}}}>
-                            <Typography>Groom Last Name:</Typography>
+                            <Typography sx={{pt:{xs:2,md:0}}}> Groom Last Name:</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                             <Typography variant='h6'>{orderState.guest.groomLastName}</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-start'}}}>
-                            <Typography>Bride Last Name:</Typography>
+                            <Typography sx={{pt:{xs:2,md:0}}}>Bride Last Name:</Typography>
                         </Grid>
-                        <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
+                        <Grid item xs={12} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                             <Typography variant='h6'>{orderState.guest.brideLastName}</Typography>
                         </Grid>  
                         </Grid>
@@ -450,7 +378,7 @@ const Details = ({ order, statuses, users}) => {
                     {/* Package Details */}
                   <Divider style={{width:'100%', height:'100%'}}><Chip label="PACKAGE DETAILS" /></Divider>
 
-                  <Grid item xs={5} py={4} >
+                  <Grid item xs={1} md={5} py={4} pr={10} >
                     <Grid container sx={{display:'flex', flexDirection:{xs:'column', md:'row'}}}>
                         <Grid item xs={6}>
                             <Typography>Package Name:</Typography>
@@ -458,11 +386,11 @@ const Details = ({ order, statuses, users}) => {
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                             <Typography variant='h6'>{orderState.package.packageName}</Typography>
                         </Grid>  
-                        
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={5} py={4}>
+
+                  <Grid item xs={1} md={5} py={4} pr={10}>
                     <Grid container sx={{display:'flex', flexDirection:{xs:'column', md:'row'}}}>
                         <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-start'}}}>
                             <Typography>Video Title:</Typography>
@@ -481,11 +409,11 @@ const Details = ({ order, statuses, users}) => {
                         null
                     )}
                         {orderState.package.addons.map((obj) => (
-                            <Grid key={obj.name} item xs={5} py={2} >
+                            <Grid key={obj.name} item xs={1} md={5} py={2} pr={10}>
                                 <Grid container sx={{display:'flex', flexDirection:{xs:'column', md:'row'}}}>
                                     
                                     <Grid item xs={6}>
-                                        <Typography >{obj.name}</Typography>
+                                        <Typography sx={{pt:{xs:2,md:0}}}>{obj.name}</Typography>
                                     </Grid>
                                     <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                                         <Typography variant='h6'>x{obj.quantity}</Typography>
@@ -507,10 +435,10 @@ const Details = ({ order, statuses, users}) => {
                
 
                   {orderState.package.music.map((song) => (
-                            <Grid key={song} item xs={5} py={2} >
+                            <Grid key={song} item xs={1} md={5} py={2} pr={10}>
                             <Grid container sx={{display:'flex', flexDirection:{xs:'column', md:'row'}}}>
                                 <Grid item xs={6}>
-                                    <Typography>{song}</Typography>
+                                    <Typography sx={{pt:{xs:2,md:0}}}>{song}</Typography>
                                 </Grid>
                                 <Grid item xs={6} sx={{display:'flex', justifyContent:{md:'flex-end'}}}>
                                         <MusicNoteIcon/>
