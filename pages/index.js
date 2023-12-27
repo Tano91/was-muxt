@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Container, Table, Typography } from '@mui/material'
+import { Container, Typography } from '@mui/material'
 import OrderDisplay from './orders'
 import Search from '../comps/Search'
 import {ordersColRef, statusesColRef, usersColRef } from '../firebase/config'

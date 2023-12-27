@@ -1,17 +1,11 @@
-import { FormControl, TextField, Box, Typography, Container, Grid, Divider, Chip, Button, InputLabel, Select, MenuItem, IconButton } from '@mui/material';
+import { FormControl, Box, Typography, Container, Grid, Divider, Chip, Button, InputLabel, Select, MenuItem,  } from '@mui/material';
 import Fade from '@mui/material/Fade';
 import Head from 'next/head'
 import Link from 'next/link';
 import { useRouter } from 'next/router'
 import ToggleRushBtn from '../../comps/ToggleRushBtn';
 import ToggleIssueBtn from '../../comps/ToggleIssueBtn';
-import CommentIcon from '@mui/icons-material/Comment';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
 import { db } from '../../firebase/config'
 import { doc, getDoc, deleteDoc,updateDoc } from "firebase/firestore"; 
 import formatDateTime from '../../comps/toDateString';
@@ -21,14 +15,10 @@ import { useEffect } from 'react';
 import { getDocs} from "firebase/firestore"; 
 import { statusesColRef } from '../../firebase/config';
 import { usersColRef } from '../../firebase/config';
-import { arrayUnion } from 'firebase/firestore';
-import { uid } from 'uid';
-import { Fragment } from 'react';
-import { useSession } from "next-auth/react"
-import { arrayRemove  } from 'firebase/firestore';
 import ConfirmDialog from '../../comps/confirmDialogue';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import Comments from '../../comps/Comments';
 
 
 
@@ -62,13 +52,14 @@ export async function getServerSideProps(context) {
 
 
 const Details = ({ order, statuses, users}) => {
-    const [orderState, setOrderState] = useState(order);
+    // const [orderState, setOrderState] = useState(order);
     const [confirmOpen, setConfirmOpen] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    // const [isSubmitting, setIsSubmitting] = useState(false);
+    const [orderState, setOrderState] = useState(order);
 
 
 
-    const { data: session, status } = useSession()
+    // const { data: session, status } = useSession()
 
     const router = useRouter()
 
@@ -170,74 +161,70 @@ const Details = ({ order, statuses, users}) => {
     useEffect(()=>{
     }, [listStatuses, listUsers]);
 
-    //comments logic
 
-    const [newComment, setNewComment]= useState('')
-    const [allComments, setAllComments] = useState(orderState.comments || []);
+    // //comments logic
+    // const [newComment, setNewComment]= useState('')
+    // const [allComments, setAllComments] = useState(orderState.comments || []);
 
-    
-    
-
-
-
-    const handleCommentSubmit = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true)
+    // const handleCommentSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setIsSubmitting(true)
       
-        const commentData = {
-          user: session.user ? session.user.name: '',
-          image: session.user? session.user.image: '',
-          comment: newComment,
-          id: uid(),
-        };
+    //     const commentData = {
+    //       user: session.user ? session.user.name: '',
+    //       image: session.user? session.user.image: '',
+    //       comment: newComment,
+    //       id: uid(),
+    //     };
       
-        const docRef = doc(db, 'orders', orderState.id);
+    //     const docRef = doc(db, 'orders', orderState.id);
       
-        try {
-          await updateDoc(docRef, {
-            comments: arrayUnion(commentData),
-          });
+    //     try {
+    //       await updateDoc(docRef, {
+    //         comments: arrayUnion(commentData),
+    //       });
 
-        // Update the order state to include the new comment
-        setOrderState((prevState) => ({
-            ...prevState,
-            comments: [...prevState.comments, commentData],
-        }));
+    //     // Update the order state to include the new comment
+    //     setOrderState((prevState) => ({
+    //         ...prevState,
+    //         comments: [...prevState.comments, commentData],
+    //     }));
           
           
-        } catch (error) {
-          console.error('Error adding comment:', error);
-          toast.error('An error occurred while adding the comment.', {
-            hideProgressBar: true,
-          });
-        } finally {
-        setIsSubmitting(false);
-      }
+    //     } catch (error) {
+    //       console.error('Error adding comment:', error);
+    //       toast.error('An error occurred while adding the comment.', {
+    //         hideProgressBar: true,
+    //       });
+    //     } finally {
+    //     setIsSubmitting(false);
+    //   }
         
-        setNewComment(''); // Clear the text field
-      };
+    //     setNewComment(''); // Clear the text field
+    //   };
+
 
       //Delete Comment Logic
-    const handleDeleteComment =  async (item) => {
-        const docRef = doc(db, "orders", orderState.id);
+    // const handleDeleteComment =  async (item) => {
+    //     const docRef = doc(db, "orders", orderState.id);
 
-        try {
-            await updateDoc(docRef, {
-              comments: arrayRemove(item)
-            });
+    //     try {
+    //         await updateDoc(docRef, {
+    //           comments: arrayRemove(item)
+    //         });
 
-            // Update the state by removing the deleted comment
-            setOrderState((prevState) => ({
-                ...prevState,
-                comments: prevState.comments.filter((comment) => comment.id !== item.id)
-            }));
+    //         // Update the state by removing the deleted comment
+    //         setOrderState((prevState) => ({
+    //             ...prevState,
+    //             comments: prevState.comments.filter((comment) => comment.id !== item.id)
+    //         }));
             
-            console.log('Item deleted successfully');
-          } catch (error) {
-            console.error('Error deleting item:', error);
-          }
+    //         console.log('Item deleted successfully');
+    //       } catch (error) {
+    //         console.error('Error deleting item:', error);
+    //       }
 
-    }
+    // }
       
 
     
@@ -535,61 +522,9 @@ const Details = ({ order, statuses, users}) => {
                     
 
 
-                    {/* Comment test */}
+                    {/* Comment Section*/}
 
-                    <Divider style={{width:'100%', height:'100%'}}><Chip label="COMMENTS" /></Divider>
-
-                    <FormControl variant="standard" onSubmit={handleCommentSubmit} component="form" sx={{width:'100%', mt:4}} noValidate autoComplete="off">
-                    <Box>
-                        <CommentIcon color='primary'/>
-                    <TextField 
-                        fullWidth
-                        label={'Type a Comment'} 
-                        id="commentBox"
-                        value={newComment} // Bind the input value to the state variable
-                        onChange={(e) => setNewComment(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                e.preventDefault();
-                            }
-                        }}
-                        InputProps={{
-                            endAdornment:<Button
-                     
-                            type="submit" disabled={isSubmitting}>Submit</Button>
-                        }}
-                        
-                    />
-                    </Box> 
-                    </FormControl>
-
-
-                    <List sx={{ width: '100%'}} >
-                        {orderState?.comments?.map((item) => (
-                            <Fragment key={item.id}>
-                            <ListItem alignItems="flex-start">
-                                <ListItemAvatar>
-                                <Avatar alt={item.user || ''} 
-                                        src={item.image || ''}  
-                                        sx={{ bgcolor: 'blue[700]' }} />
-                                </ListItemAvatar>
-                                <ListItemText sx={{ width: '100%'}}  
-                                primary={<>{item.user.split(' ')[0]}</>}
-                                secondary={<>{item.comment}</>}
-                                />
-                                <ListItemText 
-                                onClick={() => handleDeleteComment(item)}
-                                secondary={<>
-                                    <IconButton aria-label="delete" size="small">
-                                        <DeleteForeverIcon/>
-                                    </IconButton>
-                                </>}
-                                />
-                            </ListItem>
-                            <Divider variant="inset" component="li" />
-                            </Fragment>
-                        ))}
-                    </List>
+                    <Comments order={order} orderState={orderState} setOrderState={setOrderState}  />
 
 
                 </Grid>
