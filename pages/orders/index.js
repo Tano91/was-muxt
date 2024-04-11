@@ -19,7 +19,9 @@ import { blue } from "@mui/material/colors";
 import ToggleRushBtn from "../../comps/ToggleRushBtn";
 import ToggleIssueBtn from "../../comps/ToggleIssueBtn";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 
 TablePaginationActions.propTypes = {
   count: PropTypes.number.isRequired,
@@ -29,6 +31,8 @@ TablePaginationActions.propTypes = {
 };
 
 export default function OrderDisplay(props) {
+  // Inside your component
+  const router = useRouter();
   // Order Data:
   const rows = props.orders.sort((a, b) => (a.id < b.id ? -1 : 1));
   const [page, setPage] = React.useState(0);
@@ -90,8 +94,10 @@ export default function OrderDisplay(props) {
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
-          ).map((row) => (
-            <Link href={"/orders/" + row.id} key={row.id}>
+          ).map((row) => {
+            const sanitizedId = DOMPurify.sanitize(row.id);
+
+            return (
               <TableRow
                 sx={{
                   cursor: "pointer",
@@ -101,7 +107,10 @@ export default function OrderDisplay(props) {
                     borderColor: "primary.main",
                   },
                 }}
-                key={row.id}
+                key={sanitizedId}
+                onClick={() => {
+                  router.push("/orders/" + sanitizedId);
+                }}
               >
                 <TableCell
                   component="th"
@@ -161,8 +170,8 @@ export default function OrderDisplay(props) {
                   <ToggleIssueBtn issueVal={row.issues} />
                 </TableCell>
               </TableRow>
-            </Link>
-          ))}
+            );
+          })}
 
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
